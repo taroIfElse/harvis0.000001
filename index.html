@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARVIS</title>
+</head>
+<body>
+
+<canvas id="micanvas"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    let counter = 0;
+    socket.on("arduino:Data", function (dataSerial){
+        console.log(dataSerial);
+        chart.data.labels.push(counter);
+        chart.data.datasets.forEach(dataset => {
+            dataset.data.push(dataSerial.value);
+        });  
+        counter++;
+        chart.update();
+          })
+</script>
+<script>
+    var ctx = document.getElementById('micanvas').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [ 'Serial'],
+        datasets: [{
+            label:"Serial",
+            backgroundColor: "rgb(52, 73, 94)",
+            borderColor: "rgb(41, 128, 185)",
+            data: []
+        }]
+    },
+    options: {}
+       
+});
+</script>
+</body>
+</html>
